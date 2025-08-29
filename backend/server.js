@@ -4,14 +4,14 @@ const cors = require("cors");
 const path = require("path");
 const connectDB = require("./config/db");
 
-const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("./routes/userRoutes");
-const taskRoutes = require("./routes/taskRoutes");
-const reportRoutes = require("./routes/reportRoutes");
+const authRoutes = require("./routes/authRoutes")
+const userRoutes = require("./routes/userRoutes")
+const taskRoutes = require("./routes/taskRoutes")
+const reportRoutes = require("./routes/reportRoutes")
 
 const app = express();
 
-// CORS (optional if frontend is served by the same Express app)
+// Middleware to handle CORS
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "*",
@@ -20,27 +20,21 @@ app.use(
   })
 );
 
-// DB
+// Connect Database
 connectDB();
 
-// JSON
+// Middleware
 app.use(express.json());
 
-// API routes
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/reports", reportRoutes);
 
-// static assets (uploads)
+// Serve uploads folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// >>> ADD THESE TWO LINES <<<
-app.use(express.static(path.join(__dirname, "public"))); // serve React build
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
-// start
+// Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
