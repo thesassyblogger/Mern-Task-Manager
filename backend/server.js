@@ -32,6 +32,11 @@ app.use("/api/users", userRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/reports", reportRoutes);
 
+app.get('/health/db', (_, res) => {
+  const ready = require('mongoose').connection.readyState; // 1 = connected
+  res.json({ ready });
+});
+
 // Serve uploads folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
