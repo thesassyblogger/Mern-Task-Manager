@@ -35,6 +35,14 @@ app.use("/api/reports", reportRoutes);
 // Serve uploads folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+// Serve static files from React build
+app.use(express.static(path.join(__dirname, "public")));
+
+// Handle React routing - return all requests to React app
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
